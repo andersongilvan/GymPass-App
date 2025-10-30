@@ -5,13 +5,29 @@ import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
   {
-    files: ['**/*.{mjs,cjs,ts,mts,cts}'], plugins: { js }, extends: ['js/recommended'],
-    rules: {
-      'quotes': ['error', 'single'], // força aspas simples
-      'semi': ['error', 'never'],    // remove ponto e vírgula
-
+    files: ['**/*.{js,ts}'],
+    languageOptions: {
+      globals: globals.node,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
     },
-    languageOptions: { globals: globals.node }
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+    ],
+    rules: {
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'never'],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: './tsconfig.json',
+        },
+      },
+    },
   },
-  tseslint.configs.recommended,
 ])
