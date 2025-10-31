@@ -1,29 +1,43 @@
-import { RegisterUserRequest } from '@modules/user/dto/RegisterUserRequest'
 import { IUsersRepository } from '@modules/user/repository/UsersRepository'
+import { User } from '@prisma/client'
 import { UserAlreadyException } from '@utils/exceptions/EmailAlreadyExistException'
 import { hash } from 'bcryptjs'
 
+interface RegisterUserServiceRequest {
+    name: string
+    email: string
+    password: string
+}
 
+interface RegisterUserServiceResponse {
+    user: User
+}
 
 export class RegisterUsersService {
 
     constructor(private usersRepository: IUsersRepository) { }
 
-    async execute(registerUserRequest: RegisterUserRequest) {
+    async execute({ name, email, password }: RegisterUserServiceRequest): Promise<RegisterUserServiceResponse> {
 
-        const userWithDuplicateEmail = await this.usersRepository.findByEmail(registerUserRequest.email)
+        const userWithDuplicateEmail = await this.usersRepository.findByEmail(email)
 
         if (userWithDuplicateEmail) {
             throw new UserAlreadyException()
         }
 
-        const passwordHash = await hash(registerUserRequest.password, 6)
+        const passwordHash = await hash(password, 6)
 
-        registerUserRequest.password = passwordHash
+        password = passwordHash
 
-        const newUser = await this.usersRepository.create(registerUserRequest)
+        const user = await this.usersRepository.create({
+            name,
+            email,
+            password_hash: password
+        })
 
-        return newUser
+        return {
+            user
+        }
 
     }
 

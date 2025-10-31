@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { UserAlreadyException } from './EmailAlreadyExistException'
 import { ZodError } from 'zod'
 
+
 export function exceptionHandle(error: Error, _request: Request, response: Response, _next: NextFunction) {
     if (error instanceof UserAlreadyException) {
 
@@ -10,9 +11,17 @@ export function exceptionHandle(error: Error, _request: Request, response: Respo
     }
 
     if (error instanceof ZodError) {
-        return response.status(400).json(error)
+
+        const errors = error._zod.def.map((e) => {
+            return {
+                fields: e.path.join(),
+                message: e.message
+            }
+
+        })
+
+        return response.status(400).json(errors)
+
     }
 
-
-    return response.status(500).json({ validationError: error })
 }

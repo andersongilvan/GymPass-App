@@ -1,7 +1,7 @@
-import { User } from '@prisma/client'
-import { RegisterUserRequest } from '../dto/RegisterUserRequest'
+import { Prisma, User } from '@prisma/client'
+
 
 export interface IUsersRepository {
-    create(data : RegisterUserRequest) : Promise<User | null>
-    findByEmail(email : string) : Promise<User>
+    create({ name, email, password_hash } : Prisma.UserCreateInput) : Promise<User>
+    findByEmail(email : string) : Promise<User | null>
 }

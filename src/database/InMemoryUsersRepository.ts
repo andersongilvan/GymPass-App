@@ -1,19 +1,19 @@
-import { RegisterUserRequest } from '@modules/user/dto/RegisterUserRequest'
+
 import { IUsersRepository } from '@modules/user/repository/UsersRepository'
-import { User } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 
 
 export class InMemoryUsersRepository implements IUsersRepository {
 
     private users: User[] = []
 
-    async create(data: RegisterUserRequest): Promise<User> {
-        const user : User = {
-            id : 'user-1',
-            name : data.name,
-            email : data.email,
-            password_hash : data.password,
-            created_at : new Date()
+    async create({ name, email, password_hash }: Prisma.UserCreateInput): Promise<User> {
+        const user: User = {
+            id: 'user-1',
+            name,
+            email,
+            password_hash,
+            created_at: new Date()
         }
 
         this.users.push(user)

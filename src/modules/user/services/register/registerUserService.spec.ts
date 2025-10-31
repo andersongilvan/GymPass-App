@@ -51,7 +51,7 @@ describe('Register Service', () => {
 
     })
 
-    it('Should be alble to register', async () => {
+    it('Should be alble register to user', async () => {
 
         const user = await sut.execute({
             name: 'John Doe',
