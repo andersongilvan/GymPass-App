@@ -5,6 +5,7 @@ import { Prisma, User } from '@prisma/client'
 
 
 export class PrismaUsersRepository implements IUsersRepository {
+    
     async create({ name, email, password_hash }: Prisma.UserCreateInput): Promise<User> {
 
         const user = await prisma.user.create({
@@ -25,6 +26,20 @@ export class PrismaUsersRepository implements IUsersRepository {
 
         const user = await prisma.user.findUnique({
             where: { email }
+        })
+
+        if (!user) {
+            return null
+        }
+
+        return user
+
+    }
+
+    async findById(id: string): Promise<User | null> {
+
+        const user = await prisma.user.findUnique({
+            where: { id }
         })
 
         if (!user) {

@@ -20,7 +20,7 @@ describe('Authenticate Service', () => {
         await usersRepository.create({
             name: 'John Doe',
             email: 'teste@teste',
-            password: await hash('123456', 6)
+            password_hash: await hash('123456', 6)
         })
 
         const { user } = await sut.execute({
@@ -48,7 +48,7 @@ describe('Authenticate Service', () => {
          await usersRepository.create({
             name: 'John Doe',
             email: 'teste@teste',
-            password: await hash('123456', 6)
+            password_hash: await hash('123456', 6)
         })
 
         await expect(() =>

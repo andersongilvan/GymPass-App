@@ -19,7 +19,7 @@ describe('Register Service', () => {
     // A senha deve ser hash
     it('The users password must be alble hash when registering', async () => {
 
-        const user = await sut.execute({
+        const {user }= await sut.execute({
             name: 'John Doe',
             email: 'teste@teste',
             password: '123456'
@@ -53,7 +53,7 @@ describe('Register Service', () => {
 
     it('Should be alble register to user', async () => {
 
-        const user = await sut.execute({
+        const {user} = await sut.execute({
             name: 'John Doe',
             email: 'teste@teste',
             password: '123456'
